@@ -50,24 +50,160 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
 } else {
     $upload_results[] = "No files were selected for upload.";
 }
-
-// Display all upload results
-foreach($upload_results as $result) {
-    echo $result . "<br>";
-}
 ?>
 
-<div style="margin-top: 20px;">
-    <form method="POST" action="export_csv.php">
-        <button type="submit">Download CSV</button>
-    </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Results</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --border-color: #ddd;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .results {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--light-bg);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .result-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 4px solid var(--error-color);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .navigation {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            padding: 10px 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .nav-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Results</h1>
+        
+        <div class="results">
+            <?php
+            // Display all upload results with appropriate styling
+            foreach($upload_results as $result) {
+                $isSuccess = strpos($result, "has been uploaded") !== false;
+                $class = $isSuccess ? "success" : "error";
+                echo "<div class='result-item $class'>" . $result . "</div>";
+            }
+            ?>
+        </div>
+        
+        <div class="actions">
+            <form method="POST" action="export_csv.php">
+                <button type="submit" class="btn">Download CSV</button>
+            </form>
 
-    <form method="POST" action="export_pdf.php" style="margin-top: 10px;">
-        <button type="submit">Download PDF</button>
-    </form>
+            <form method="POST" action="export_pdf.php">
+                <button type="submit" class="btn btn-secondary">Download PDF</button>
+            </form>
+        </div>
 
-    <div style="margin-top: 20px;">
-        <a href="index.php">Back to Upload Page</a> | 
-        <a href="files_list.php">View Uploaded Documents</a>
+        <div class="navigation">
+            <a href="index.php" class="nav-link">Back to Upload Page</a>
+            <a href="files_list.php" class="nav-link">View Uploaded Documents</a>
+        </div>
     </div>
-</div>
+</body>
+</html>
