@@ -1,0 +1,52 @@
+# PHP specific
+/vendor/
+composer.phar
+composer.lock
+.phpunit.result.cache
+/phpunit.xml
+
+# IDE and editor specific files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+.DS_Store
+
+# Environment and configuration files
+.env
+.env.backup
+.phpunit.result.cache
+.php_cs.cache
+config.php
+
+# Cache and logs
+/logs/
+/cache/
+*.log
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+*.lnk
+Desktop.ini
+
+# Build and temporary files
+/tmp/
+/temp/
+/build/
+/.pnp
+.pnp.js
+
+# Dependency directories
+/node_modules/
+/bower_components/
+
+# Distribution directories
+/dist/
+
+# Uploads and user content
+/uploads/
+/public/uploads/
+/storage/app/public/ 
