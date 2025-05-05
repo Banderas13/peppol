@@ -1,0 +1,3 @@
+<?php
+// Upload file handling
+?> 
