@@ -49,4 +49,7 @@ Desktop.ini
 # Uploads and user content
 /uploads/
 /public/uploads/
-/storage/app/public/ 
+/storage/app/public/
+
+# Data files
+invoices.csv 
