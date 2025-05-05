@@ -1,4 +1,12 @@
 <?php
+/**
+ * File Upload Handler for UBL/XML Documents
+ * 
+ * This script processes uploaded UBL/XML files, validates them, and moves them to the uploads directory.
+ * It shows results to the user and provides navigation options.
+ */
+
+// Define the target directory for uploaded files
 $target_dir = "uploads/";
 
 // Create the uploads directory if it doesn't exist
@@ -6,6 +14,7 @@ if (!file_exists($target_dir)) {
     mkdir($target_dir, 0777, true);
 }
 
+// Initialize upload status flag and results array
 $uploadOk = 1;
 $upload_results = [];
 
@@ -23,7 +32,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             $uploadOk = 0;
         }
         
-        // Check file size
+        // Check file size (500KB limit)
         if ($_FILES["fileToUpload"]["size"][$key] > 500000) {
             $upload_results[] = "Sorry, file '$filename' is too large.";
             $uploadOk = 0;
@@ -40,6 +49,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             $upload_results[] = "Sorry, your file '$filename' was not uploaded.";
         // if everything is ok, try to upload file
         } else {
+            // Move uploaded file from temporary location to target directory
             if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$key], $target_file)) {
                 $upload_results[] = "The file '" . htmlspecialchars($filename) . "' has been uploaded.";
             } else {
@@ -57,6 +67,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
 <head>
     <title>Upload Results</title>
     <style>
+        /* CSS Variables for consistent theming */
         :root {
             --primary-color: #3498db;
             --primary-dark: #2980b9;
@@ -68,6 +79,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             --error-color: #e74c3c;
         }
         
+        /* Base styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -77,6 +89,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             line-height: 1.6;
         }
         
+        /* Main container */
         .container {
             max-width: 800px;
             margin: 40px auto;
@@ -86,6 +99,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
+        /* Page header */
         h1 {
             color: var(--primary-color);
             margin-top: 0;
@@ -94,6 +108,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             font-weight: 600;
         }
         
+        /* Results container */
         .results {
             margin: 20px 0;
             padding: 15px;
@@ -102,22 +117,26 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             border: 1px solid var(--border-color);
         }
         
+        /* Individual result items */
         .result-item {
             padding: 10px;
             margin-bottom: 8px;
             border-radius: 4px;
         }
         
+        /* Success message styling */
         .success {
             background-color: rgba(46, 204, 113, 0.1);
             border-left: 4px solid var(--success-color);
         }
         
+        /* Error message styling */
         .error {
             background-color: rgba(231, 76, 60, 0.1);
             border-left: 4px solid var(--error-color);
         }
         
+        /* Button styling */
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -143,6 +162,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             background-color: #27ae60;
         }
         
+        /* Action buttons container */
         .actions {
             margin-top: 25px;
             display: flex;
@@ -150,6 +170,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             flex-wrap: wrap;
         }
         
+        /* Navigation links container */
         .navigation {
             margin-top: 25px;
             padding-top: 20px;
@@ -159,6 +180,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             flex-wrap: wrap;
         }
         
+        /* Navigation link styling */
         .nav-link {
             display: inline-block;
             padding: 10px 20px;
@@ -183,6 +205,7 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
             <?php
             // Display all upload results with appropriate styling
             foreach($upload_results as $result) {
+                // Set class based on whether the upload was successful
                 $isSuccess = strpos($result, "has been uploaded") !== false;
                 $class = $isSuccess ? "success" : "error";
                 echo "<div class='result-item $class'>" . $result . "</div>";
@@ -191,16 +214,19 @@ if(!empty($_FILES["fileToUpload"]["name"][0])) {
         </div>
         
         <div class="actions">
+            <!-- Form to download CSV export of uploaded files -->
             <form method="POST" action="export_csv.php">
                 <button type="submit" class="btn">Download CSV</button>
             </form>
 
+            <!-- Form to download PDF export of uploaded files -->
             <form method="POST" action="export_pdf.php">
                 <button type="submit" class="btn btn-secondary">Download PDF</button>
             </form>
         </div>
 
         <div class="navigation">
+            <!-- Navigation links -->
             <a href="index.php" class="nav-link">Back to Upload Page</a>
             <a href="files_list.php" class="nav-link">View Uploaded Documents</a>
         </div>

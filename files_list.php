@@ -1,8 +1,17 @@
 <!DOCTYPE html>
+<!--
+    files_list.php - Document List and Selection Page
+    
+    This page displays all uploaded UBL/XML files and allows users to:
+    1. View the list of uploaded files with details
+    2. Select specific files for export
+    3. Generate CSV or PDF reports from selected files
+-->
 <html>
 <head>
     <title>Uploaded Documents</title>
     <style>
+        /* CSS Variables for consistent theming */
         :root {
             --primary-color: #3498db;
             --primary-dark: #2980b9;
@@ -14,6 +23,7 @@
             --table-header: #e6f2fa;
         }
         
+        /* Base styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -23,6 +33,7 @@
             line-height: 1.6;
         }
         
+        /* Main container */
         .container {
             max-width: 1000px;
             margin: 40px auto;
@@ -32,6 +43,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
+        /* Page header */
         h1 {
             color: var(--primary-color);
             margin-top: 0;
@@ -40,6 +52,7 @@
             font-weight: 600;
         }
         
+        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -49,32 +62,38 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
+        /* Table cell styling */
         th, td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Table header styling */
         th {
             background-color: var(--table-header);
             font-weight: 600;
             color: var(--primary-dark);
         }
         
+        /* Table row hover effect */
         tr:hover {
             background-color: var(--table-hover);
         }
         
+        /* Remove border from last row */
         tr:last-child td {
             border-bottom: none;
         }
         
+        /* Action buttons container */
         .actions {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
         
+        /* Button styling */
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -99,12 +118,14 @@
             background-color: #27ae60;
         }
         
+        /* Navigation section */
         .navigation {
             margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
         
+        /* Navigation link styling */
         .nav-link {
             display: inline-block;
             padding: 10px 20px;
@@ -120,17 +141,20 @@
             color: white;
         }
         
+        /* Checkbox container */
         .checkbox-custom {
             position: relative;
             display: inline-block;
         }
         
+        /* Checkbox styling */
         input[type="checkbox"] {
             cursor: pointer;
             width: 18px;
             height: 18px;
         }
         
+        /* Empty files message */
         .no-files {
             padding: 20px;
             text-align: center;
@@ -138,11 +162,13 @@
             font-style: italic;
         }
         
+        /* File size text */
         .file-size {
             color: #666;
             font-size: 0.9em;
         }
         
+        /* File type label */
         .file-type {
             display: inline-block;
             padding: 3px 8px;
@@ -158,16 +184,20 @@
     <div class="container">
         <h1>Uploaded Documents</h1>
         
+        <!-- Form for file selection and export actions -->
         <form id="filesForm" method="POST">
             <div class="actions">
+                <!-- Export buttons for CSV and PDF -->
                 <button type="submit" formaction="export_csv.php" name="export" value="csv" class="btn">Download CSV</button>
                 <button type="submit" formaction="export_pdf.php" name="export" value="pdf" class="btn btn-secondary">Download PDF</button>
             </div>
             
+            <!-- Table displaying the list of uploaded files -->
             <table>
                 <thead>
                     <tr>
                         <th>
+                            <!-- Select all checkbox -->
                             <div class="checkbox-custom">
                                 <input type="checkbox" id="selectAll" onclick="toggleAll()">
                             </div>
@@ -180,14 +210,17 @@
                 </thead>
                 <tbody>
                     <?php
+                    // Get all uploaded XML and UBL files
                     $files = glob('uploads/*.{xml,ubl}', GLOB_BRACE);
                     
                     if (empty($files)) {
+                        // Display message if no files have been uploaded
                         echo '<tr><td colspan="5" class="no-files">No files uploaded yet.</td></tr>';
                     } else {
+                        // Loop through each file and display its details
                         foreach ($files as $file) {
                             $filename = basename($file);
-                            $filesize = round(filesize($file) / 1024, 2); // KB
+                            $filesize = round(filesize($file) / 1024, 2); // Convert to KB
                             $filetype = pathinfo($file, PATHINFO_EXTENSION);
                             $uploadDate = date("Y-m-d H:i:s", filemtime($file));
                             
@@ -205,12 +238,16 @@
             </table>
         </form>
         
+        <!-- Navigation link back to upload page -->
         <div class="navigation">
             <a href="index.php" class="nav-link">Back to Upload Page</a>
         </div>
     </div>
 
     <script>
+        /**
+         * Toggle all checkboxes based on the state of the "Select All" checkbox
+         */
         function toggleAll() {
             const selectAll = document.getElementById('selectAll');
             const checkboxes = document.getElementsByName('selected_files[]');
